@@ -14,7 +14,7 @@ public class Main {
         String[] directories = path.split(File.pathSeparator);
 
         for (String dir: directories) {
-            File file = new File(dir, fileName);
+            File file = new File(dir, fileName); // Look for the file name in the directories 
 
             if (file.exists() && file.canExecute()) {
                 fullPath = file.getAbsolutePath();
@@ -34,7 +34,10 @@ public class Main {
         arrguments.put("echo",  " is a shell builtin");
         arrguments.put("exit", " is a shell builtin" );
         arrguments.put("type", " is a shell builtin" ); 
+        arrguments.put("pwd", " is a shell builtin");
 
+        
+        
         while(true) {
 
             System.out.print("$ ");
@@ -78,6 +81,10 @@ public class Main {
                             System.out.println(fileName + ": not found");
                         }
                     }
+                }
+
+                case "pwd" -> {
+                    System.out.println(System.getProperty("user.dir"));
                 }
 
                 default -> {

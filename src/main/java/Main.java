@@ -3,6 +3,27 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
+
+    static public String findPath(String command) {
+
+        String path = System.getenv("PATH");
+        String fullPath = "";
+
+        if (path == null) return null;
+        
+        String[] directories = path.split(File.pathSeparator);
+
+        for (String dir: directories) {
+            File file = new File(dir, command);
+
+            if (file.exists() && file.canExecute()) {
+                fullPath = file.getAbsolutePath();
+            }
+        }
+        return fullPath;
+    }
+
+
     public static void main(String[] args) throws Exception {
     
 
@@ -43,62 +64,44 @@ public class Main {
                         System.out.println(tokens[1] + arrguments.get(tokens[1]));
                     } else {
 
-                        String path = System.getenv("PATH");
-
+                        String path = findPath(tokens[1]);
                         boolean found = false;
 
                         if (path != null) {
-                            
-                            String[] directories = path.split(File.pathSeparator); 
+                            System.out.println(tokens[1] + " is " + path);
+                            found = true;
+                            break;
+                        }
 
-
-                            for (String dir: directories) {
-                                File file = new File(dir, tokens[1]);
-
-                                if (file.exists() && file.canExecute()) {
-                                    System.out.println(tokens[1] + " is " + file.getAbsolutePath());
-                                    found = true;
-                                    break;
-                                } 
-                            }
-
-                            if (!found) {
-                                System.out.println(tokens[1] + ": not found");
-                            }
+                        if (!found) {
+                            System.out.println(tokens[1] + ": not found");
                         }
                     }
-                        
                 }
 
                 default -> {
 
                     boolean found = false;
 
-                    String path = System.getenv("PATH");
+                    String path = findPath(tokens[0]);
 
                     if (path != null) {
-                        String[] directories = path.split(File.pathSeparator);
-
-                        
-                        for(String dir: directories) {
-                            File file = new File(dir, tokens[0]);
-
-                            if (file.exists() && file.canExecute()) {
-                                ProcessBuilder program = new ProcessBuilder(tokens);
-                                program.inheritIO();
-                                program.start().waitFor();
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            System.out.println(tokens[0] + ": not found");
-                        }
+                                               
+                        ProcessBuilder pb = new ProcessBuilder(tokens);
+                        pb.inheritIO();
+                        pb.start().waitFor();
+                        found = true;
+                        break;
                     }
+                        
+
+                    if (!found) {
+                        System.out.println(tokens[0] + ": not found");
+                    }
+                    
                 
                 }
-            };        
+            };       
 
        } 
 

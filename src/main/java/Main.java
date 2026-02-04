@@ -12,9 +12,9 @@ public class Main {
 
         HashMap<String, String> arrguments = new HashMap<>();
 
-        arrguments.put("echo",  " is a shell builtin");
-        arrguments.put("exit", " is a shell builtin" );
-        arrguments.put("type", " is a shell builtin" ); 
+        arrguments.put("echo",  " is a shell builtin echo");
+        arrguments.put("exit", " is a shell builtin exit" );
+        arrguments.put("type", " is a shell builtin type" ); 
 
         while(true) {
 
@@ -39,7 +39,7 @@ public class Main {
 
                 case "type" -> {
                     if(arrguments.containsKey(tokens[1])) {
-                        System.out.println(tokens[1] + arrguments.get(tokens[0]));
+                        System.out.println(tokens[1] + arrguments.get(tokens[1]));
                     } else {
                         System.out.println(tokens[1] + ": not found");
                     }

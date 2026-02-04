@@ -40,23 +40,29 @@ public class Main {
                         System.out.println(tokens[1] + arrguments.get(tokens[1]));
                     } else {
 
-                        String pathEnv = System.getenv("PATH");
+                        String path = System.getenv("PATH");
 
-                        if (pathEnv != null) {
-                            String[] directories = pathEnv.split(File.pathSeparator); 
+                        boolean found = false;
+
+                        if (path != null) {
+                            
+                            String[] directories = path.split(File.pathSeparator); 
 
 
                             for (String dir: directories) {
                                 File file = new File(dir, tokens[1]);
 
-                                if (file.exists()) {
+                                if (file.exists() && file.canExecute()) {
                                     System.out.println(tokens[1] + " is " + file.getAbsolutePath());
+                                    found = true;
                                     break;
-                                }
+                                } 
                             }
+                        } else {
+                            System.out.println(tokens[1] + ": not found");
                         }
-                        System.out.println(tokens[1] + ": not found");
                     }
+                        
                 }
 
                 default -> System.out.println(command + ": command not found");

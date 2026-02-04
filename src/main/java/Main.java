@@ -19,18 +19,17 @@ public class Main {
             if(command.equals("exit")) break;     
 
             switch(tokens[0]) {
-                case "echo" : {
-
-                    for (int i = 1; i < tokens.length; i++) {
-                        System.out.print(tokens[i] + " ");
+                
+                case "echo" -> System.out.println(command.split(" ", 2)[1]); // Seperate input into two parts and output second element
+                    
+                 /*{  for (int i = 1; i < tokens.length; i++) {
+                        System.out.print(tokens[i] );
+                        if (i < tokens.length - 1) {System.out.print(" ");} 
                     }
                     System.out.println();
-                    break;
-                }
-                default: System.out.println(command + ": command not found");
-            };
-
-                  
+                }*/
+                default -> System.out.println(command + ": command not found");
+            };        
 
        } 
 

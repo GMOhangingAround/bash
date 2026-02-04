@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    static public String findPath(String command) {
+    static public String findPath(String fileName) {
 
         String path = System.getenv("PATH");
         String fullPath = null;
@@ -14,7 +14,7 @@ public class Main {
         String[] directories = path.split(File.pathSeparator);
 
         for (String dir: directories) {
-            File file = new File(dir, command);
+            File file = new File(dir, fileName);
 
             if (file.exists() && file.canExecute()) {
                 fullPath = file.getAbsolutePath();
@@ -64,17 +64,18 @@ public class Main {
                         System.out.println(tokens[1] + arrguments.get(tokens[1]));
                     } else {
 
-                        String path = findPath(tokens[1]);
+                        String fileName = tokens[1];
+                        String path = findPath(fileName);
                         boolean found = false;
 
                         if (path != null) {
-                            System.out.println(tokens[1] + " is " + path);
+                            System.out.println(fileName + " is " + path);
                             found = true;
                             break;
                         }
 
                         if (!found) {
-                            System.out.println(tokens[1] + ": not found");
+                            System.out.println(fileName + ": not found");
                         }
                     }
                 }
@@ -82,12 +83,14 @@ public class Main {
                 default -> {
 
                     boolean found = false;
-
-                    String path = findPath(tokens[0]);
+                    
+                    String fileName = tokens[0];
+                    String path = findPath(fileName);
 
                     if (path != null) {
-                                               
-                        ProcessBuilder pb = new ProcessBuilder(path);
+                        
+                        tokens[0] = path;         
+                        ProcessBuilder pb = new ProcessBuilder(tokens);
                         pb.inheritIO();
                         pb.start().waitFor();
                         found = true;
@@ -96,7 +99,7 @@ public class Main {
                         
 
                     if (!found) {
-                        System.out.println(tokens[0] + ": not found");
+                        System.out.println(fileName + ": not found");
                     }
                     
                 

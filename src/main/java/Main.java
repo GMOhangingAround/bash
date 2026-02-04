@@ -53,7 +53,7 @@ public class Main {
 
 
                             for (String dir: directories) {
-                                File file = new File(dir, tokens[1]);
+                                File file = new File(dir, tokens[0]);
 
                                 if (file.exists() && file.canExecute()) {
 

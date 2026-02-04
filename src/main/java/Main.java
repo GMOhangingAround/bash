@@ -36,6 +36,9 @@ public class Main {
                 }
 
                 case "type" -> {
+
+                    if (tokens.length == 1) {break;}
+
                     if(arrguments.containsKey(tokens[1])) {
                         System.out.println(tokens[1] + arrguments.get(tokens[1]));
                     } else {
@@ -67,7 +70,7 @@ public class Main {
                         
                 }
 
-                default -> System.out.println(command + ": command not found");
+                default -> System.out.println(tokens[0] + ": not found");
             };        
 
        } 

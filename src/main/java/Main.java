@@ -7,20 +7,19 @@ public class Main {
     static public String findPath(String fileName) {
 
         String path = System.getenv("PATH");
-        String fullPath = null;
 
         if (path == null) return null;
         
         String[] directories = path.split(File.pathSeparator);
 
         for (String dir: directories) {
-            File file = new File(dir, fileName); // Look for the file name in the directories 
+            File file = new File(dir, fileName); // Look for the file name in directories 
 
             if (file.exists() && file.canExecute()) {
-                fullPath = file.getAbsolutePath();
+                return file.getAbsolutePath();
             }
         }
-        return fullPath;
+        return null;
     }
 
 
@@ -29,12 +28,15 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in); // Start scanner
 
+        String currentDirectory = System.getProperty("user.dir");
+
         HashMap<String, String> arrguments = new HashMap<>();
 
         arrguments.put("echo",  " is a shell builtin");
         arrguments.put("exit", " is a shell builtin" );
         arrguments.put("type", " is a shell builtin" ); 
         arrguments.put("pwd", " is a shell builtin");
+        arrguments.put("cd", " is a shell builtin");
 
         
         
@@ -84,31 +86,44 @@ public class Main {
                 }
 
                 case "pwd" -> {
-                    System.out.println(System.getProperty("user.dir"));
+                    System.out.println(currentDirectory); 
+                }
+
+                case "cd" -> {
+                    
+                    if (tokens.length < 2) {
+                        break; 
+                    }
+
+                    File newPath = new File(tokens[1]);
+
+
+                    if (!newPath.isAbsolute()) {
+
+                        newPath = new File(currentDirectory, tokens[1]);
+                    } 
+                    
+                    if (newPath.exists() && newPath.isDirectory()) {
+                        currentDirectory = newPath.getCanonicalPath(); 
+                    } else {
+                        System.out.println("cd: " + tokens[1] + ": No such file or directory");
+                    }
                 }
 
                 default -> {
-
-                    boolean found = false;
-                    
-                    
+               
                     String path = findPath(tokens[0]);
 
-                    if (path != null) {
-                        
-                        //tokens[0] = path;         
-                        ProcessBuilder pb = new ProcessBuilder(tokens);
-                        pb.inheritIO();
-                        pb.start().waitFor();
-                        found = true;
+                    if (path == null) {
+                        System.out.println(tokens[0] + ": not found");
                         break;
                     }
-                        
 
-                    if (!found) {
-                        System.out.println(tokens[0] + ": not found");
-                    }
-                    
+                    //tokens[0] = path;         
+                    ProcessBuilder pb = new ProcessBuilder(tokens);
+                    pb.directory(new File(currentDirectory));
+                    pb.inheritIO();
+                    pb.start().waitFor();               
                 
                 }
             };       

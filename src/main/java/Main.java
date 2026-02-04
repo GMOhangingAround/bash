@@ -56,7 +56,11 @@ public class Main {
                                 File file = new File(dir, tokens[1]);
 
                                 if (file.exists() && file.canExecute()) {
-                                    System.out.println(tokens[1] + " is " + file.getAbsolutePath());
+
+                                    ProcessBuilder program = new ProcessBuilder(tokens);
+                                    program.inheritIO();
+                                    program.start();
+                                   // System.out.println(tokens[1] + " is " + file.getAbsolutePath());
                                     found = true;
                                     break;
                                 } 

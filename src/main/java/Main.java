@@ -59,8 +59,8 @@ public class Main {
 
                                     ProcessBuilder program = new ProcessBuilder(tokens);
                                     program.inheritIO();
-                                    program.start();
-                                   // System.out.println(tokens[1] + " is " + file.getAbsolutePath());
+                                    program.start().waitFor();
+                                    System.out.println(tokens[1] + " is " + file.getAbsolutePath());
                                     found = true;
                                     break;
                                 } 
@@ -74,7 +74,9 @@ public class Main {
                         
                 }
 
-                default -> System.out.println(tokens[0] + ": not found");
+                default -> {
+                    System.out.println(tokens[0] + ": not found");
+                }
             };        
 
        } 

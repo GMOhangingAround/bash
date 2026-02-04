@@ -7,7 +7,7 @@ public class Main {
     static public String findPath(String command) {
 
         String path = System.getenv("PATH");
-        String fullPath = "";
+        String fullPath = null;
 
         if (path == null) return null;
         

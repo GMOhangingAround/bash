@@ -6,19 +6,16 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in); // Start scanner
 
-        boolean run = true;
-
-        while(run) {
+        while(true) {
 
             System.out.print("$ ");
         
             String command = scanner.nextLine(); // Read next line 
 
-            if(command.equals("exit")) {
-                run = false;
-            } else {
-                System.out.println(command + ": command not found");
-            }
+            if(command.equals("exit")) break; 
+         
+            System.out.println(command + ": command not found");
+            
 
        } 
 

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -8,9 +10,11 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in); // Start scanner
 
-        ArrayList<String> arrguments = new ArrayList<>(List.of("echo", "exit", "type"));
-        String[] description = {" is a shell builtin", ": not found"};
+        HashMap<String, String> arrguments = new HashMap<>();
 
+        arrguments.put("echo",  " is a shell builtin");
+        arrguments.put("exit", " is a shell builtin" );
+        arrguments.put("type", " is a shell builtin" ); 
 
         while(true) {
 
@@ -34,12 +38,11 @@ public class Main {
                 }
 
                 case "type" -> {
-                    
-                    if(arrguments.contains(tokens[1])){
-                        System.out.println(tokens[1] + description[0]);
+                    if(arrguments.containsKey(tokens[1])) {
+                        System.out.println(tokens[1] + arrguments.get(tokens[0]));
                     } else {
-                        System.out.println(tokens[1] + description[1]);
-                    };
+                        System.out.println(tokens[1] + ": not found");
+                    }
                 }
 
                 default -> System.out.println(command + ": command not found");

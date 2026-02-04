@@ -8,13 +8,16 @@ public class Main {
 
         boolean run = true;
 
-       while(run) {
-        
-        System.out.print("$ ");
-        
-        String command = scanner.nextLine(); // Read next line 
+        while(run) {
 
-        System.out.println(command + ": command not found");
+            System.out.print("$ ");
+        
+            String command = scanner.nextLine(); // Read next line 
+
+            if(command.equals("exit")) {
+                run = false;
+            }
+            System.out.println(command + ": command not found");
 
        } 
 

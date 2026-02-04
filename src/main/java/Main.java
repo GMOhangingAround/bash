@@ -87,7 +87,7 @@ public class Main {
 
                     if (path != null) {
                                                
-                        ProcessBuilder pb = new ProcessBuilder(tokens);
+                        ProcessBuilder pb = new ProcessBuilder(path);
                         pb.inheritIO();
                         pb.start().waitFor();
                         found = true;

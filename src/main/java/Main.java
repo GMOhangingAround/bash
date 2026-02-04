@@ -89,7 +89,7 @@ public class Main {
 
                     if (path != null) {
                         
-                        tokens[0] = path;         
+                        //tokens[0] = path;         
                         ProcessBuilder pb = new ProcessBuilder(tokens);
                         pb.inheritIO();
                         pb.start().waitFor();

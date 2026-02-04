@@ -84,8 +84,8 @@ public class Main {
 
                     boolean found = false;
                     
-                    String fileName = tokens[0];
-                    String path = findPath(fileName);
+                    
+                    String path = findPath(tokens[0]);
 
                     if (path != null) {
                         
@@ -99,7 +99,7 @@ public class Main {
                         
 
                     if (!found) {
-                        System.out.println(fileName + ": not found");
+                        System.out.println(tokens[0] + ": not found");
                     }
                     
                 

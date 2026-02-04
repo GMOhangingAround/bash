@@ -1,7 +1,5 @@
-import java.util.ArrayList;
+import java.io.File;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -12,9 +10,9 @@ public class Main {
 
         HashMap<String, String> arrguments = new HashMap<>();
 
-        arrguments.put("echo",  " is a shell builtin echo");
-        arrguments.put("exit", " is a shell builtin exit" );
-        arrguments.put("type", " is a shell builtin type" ); 
+        arrguments.put("echo",  " is a shell builtin");
+        arrguments.put("exit", " is a shell builtin" );
+        arrguments.put("type", " is a shell builtin" ); 
 
         while(true) {
 
@@ -41,6 +39,22 @@ public class Main {
                     if(arrguments.containsKey(tokens[1])) {
                         System.out.println(tokens[1] + arrguments.get(tokens[1]));
                     } else {
+
+                        String pathEnv = System.getenv("PATH");
+
+                        if (pathEnv != null) {
+                            String[] directories = pathEnv.split(File.pathSeparator); 
+
+
+                            for (String dir: directories) {
+                                File file = new File(dir, tokens[1]);
+
+                                if (file.exists()) {
+                                    System.out.println(tokens[1] + " is " + file.getAbsolutePath());
+                                    break;
+                                }
+                            }
+                        }
                         System.out.println(tokens[1] + ": not found");
                     }
                 }

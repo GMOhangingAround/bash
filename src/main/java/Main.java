@@ -53,13 +53,9 @@ public class Main {
 
 
                             for (String dir: directories) {
-                                File file = new File(dir, tokens[0]);
+                                File file = new File(dir, tokens[1]);
 
                                 if (file.exists() && file.canExecute()) {
-
-                                    ProcessBuilder program = new ProcessBuilder(tokens);
-                                    program.inheritIO();
-                                    program.start().waitFor();
                                     System.out.println(tokens[1] + " is " + file.getAbsolutePath());
                                     found = true;
                                     break;
@@ -75,7 +71,32 @@ public class Main {
                 }
 
                 default -> {
-                    System.out.println(tokens[0] + ": not found");
+
+                    boolean found = false;
+
+                    String path = System.getenv("PATH");
+
+                    if (path != null) {
+                        String[] directories = path.split(File.pathSeparator);
+
+                        
+                        for(String dir: directories) {
+                            File file = new File(dir, tokens[0]);
+
+                            if (file.exists() && file.canExecute()) {
+                                ProcessBuilder program = new ProcessBuilder(tokens);
+                                program.inheritIO();
+                                program.start().waitFor();
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (!found) {
+                            System.out.println(tokens[0] + ": not found");
+                        }
+                    }
+                
                 }
             };        
 

@@ -58,8 +58,10 @@ public class Main {
                                     break;
                                 } 
                             }
-                        } else {
-                            System.out.println(tokens[1] + ": not found");
+
+                            if (!found) {
+                                System.out.println(tokens[1] + ": not found");
+                            }
                         }
                     }
                         

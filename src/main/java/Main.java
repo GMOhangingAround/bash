@@ -28,7 +28,10 @@ public class Main {
 
         ArrayList<String> arr = new ArrayList<>();
         StringBuilder newText = new StringBuilder();
-        boolean isQuote = false; 
+        boolean isQuote = false;
+        boolean doubleQ = false;  
+
+       //for (char c : text.toCharArray()) {}
 
         for (int x = 0; x < text.length(); x++) {
 
@@ -37,7 +40,10 @@ public class Main {
                     arr.add(newText.toString());
                     newText.setLength(0);;
                 }
-            } else if (text.charAt(x) == '\'') {
+            } else if (text.charAt(x) == '\"' ) {
+                isQuote = !isQuote; 
+                doubleQ = !doubleQ;
+            } else if (text.charAt(x) == '\'' && !doubleQ) {
                 isQuote = !isQuote; 
             } else {
                 newText.append(text.charAt(x));

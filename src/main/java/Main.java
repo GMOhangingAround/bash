@@ -150,7 +150,7 @@ public class Main {
                     String path = findPath(token.get(0));
 
                     if (path == null) {
-                        System.out.println(path + ": not found");
+                        System.out.println(token.get(0) + ": command not found");
                         break;
                     }
 

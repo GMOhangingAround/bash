@@ -33,8 +33,10 @@ public class Main {
         for (int x = 0; x < text.length(); x++) {
 
             if (text.charAt(x) == ' ' && !isQuote) {
-                arr.add(newText.toString());
-                newText.setLength(0);;
+                if (newText.length() > 0) {
+                    arr.add(newText.toString());
+                    newText.setLength(0);;
+                }
             } else if (text.charAt(x) == '\'') {
                 isQuote = !isQuote; 
             } else {

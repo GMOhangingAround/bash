@@ -81,7 +81,7 @@ public class Main {
                 
                 case "echo" -> {  
                     
-                    for (int i = 0; i < token.size(); i++) {
+                    for (int i = 1; i < token.size(); i++) {
                         System.out.print(token.get(i) );
                         if (i < token.size()- 1) {System.out.print(" ");} // Print space until last element
                     }

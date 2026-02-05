@@ -73,13 +73,13 @@ public class Main {
         
             String command = scanner.nextLine(); // Read next line 
 
-            String[] tokens = command.split(" ");
+            //String[] tokens = command.split(" ");
 
             ArrayList<String> token = textParser(command);
 
             if(command.equals("exit")) break;     
 
-            switch(tokens[0]) {
+            switch(token.get(0)) {
                 
                 case "echo" -> {  
                     
@@ -92,13 +92,13 @@ public class Main {
 
                 case "type" -> {
 
-                    if (tokens.length == 1) {break;}
+                    if (token.size() == 1) {break;}
 
-                    if(arrguments.containsKey(tokens[1])) {
-                        System.out.println(tokens[1] + arrguments.get(tokens[1]));
+                    if(arrguments.containsKey(token.get(1))) {
+                        System.out.println(token.get(1) + arrguments.get(token.get(1)));
                     } else {
 
-                        String fileName = tokens[1];
+                        String fileName = token.get(1);
                         String path = findPath(fileName);
                         boolean found = false;
 
@@ -120,42 +120,42 @@ public class Main {
 
                 case "cd" -> {
                     
-                    if (tokens.length < 2) {
+                    if (token.size() < 2) {
                         break; 
                     }
 
-                    if (tokens[1].contentEquals("~")) {
+                    if (token.get(1).contentEquals("~")) {
                         String path = System.getenv("HOME");
                         currentDirectory = path;
                         break;
                     }
 
-                    File newPath = new File(tokens[1]); // Create file object 
+                    File newPath = new File(token.get(1)); // Create file object 
 
                     // If the path doesn't start from the root, add the passed value to current directory 
                     if (!newPath.isAbsolute()) {
 
-                        newPath = new File(currentDirectory, tokens[1]);
+                        newPath = new File(currentDirectory, token.get(1));
                     } 
                     //Check if the path exist
                     if (newPath.exists() && newPath.isDirectory()) {
                         currentDirectory = newPath.getCanonicalPath(); // Set canonical path
                     } else {
-                        System.out.println("cd: " + tokens[1] + ": No such file or directory");
+                        System.out.println("cd: " + token.get(1) + ": No such file or directory");
                     }
                 }
 
                 default -> {
                
-                    String path = findPath(tokens[0]);
+                    String path = findPath(token.get(0));
 
                     if (path == null) {
                         System.out.println(path + ": not found");
                         break;
                     }
 
-                    //tokens[0] = path;         
-                    ProcessBuilder pb = new ProcessBuilder(tokens);
+                    //token.get(0) = path;         
+                    ProcessBuilder pb = new ProcessBuilder(token);
                     pb.directory(new File(currentDirectory)); // Update directory
                     pb.inheritIO();
                     pb.start().waitFor();               

@@ -28,7 +28,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in); // Start scanner
 
-        String currentDirectory = System.getProperty("user.dir");
+        String currentDirectory = System.getProperty("user.dir"); // Get current working directory 
 
         HashMap<String, String> arrguments = new HashMap<>();
 
@@ -95,16 +95,22 @@ public class Main {
                         break; 
                     }
 
-                    File newPath = new File(tokens[1]);
+                    if (tokens[1].contentEquals("~")) {
+                        String path = System.getenv("HOME");
+                        currentDirectory = path;
+                        break;
+                    }
 
+                    File newPath = new File(tokens[1]); // Create file object 
 
+                    // If the path doesn't start from the root, add the passed value to current directory 
                     if (!newPath.isAbsolute()) {
 
                         newPath = new File(currentDirectory, tokens[1]);
                     } 
-                    
+                    //Check if the path exist
                     if (newPath.exists() && newPath.isDirectory()) {
-                        currentDirectory = newPath.getCanonicalPath(); 
+                        currentDirectory = newPath.getCanonicalPath(); // Set canonical path
                     } else {
                         System.out.println("cd: " + tokens[1] + ": No such file or directory");
                     }
@@ -121,7 +127,7 @@ public class Main {
 
                     //tokens[0] = path;         
                     ProcessBuilder pb = new ProcessBuilder(tokens);
-                    pb.directory(new File(currentDirectory));
+                    pb.directory(new File(currentDirectory)); // Update directory
                     pb.inheritIO();
                     pb.start().waitFor();               
                 

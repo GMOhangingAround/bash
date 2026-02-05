@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -13,13 +14,37 @@ public class Main {
         String[] directories = path.split(File.pathSeparator);
 
         for (String dir: directories) {
+            // Create file objext for each directory
             File file = new File(dir, fileName); // Look for the file name in directories 
 
             if (file.exists() && file.canExecute()) {
-                return file.getAbsolutePath();
+                return file.getAbsolutePath(); // Return path of the first found file 
             }
         }
         return null;
+    }
+
+    static public ArrayList<String> textParser(String text) {
+
+        ArrayList<String> arr = new ArrayList<>();
+        StringBuilder newText = new StringBuilder();
+        boolean isQuote = false; 
+
+        for (int x = 0; x < text.length(); x++) {
+
+            if (text.charAt(x) == ' ' && !isQuote) {
+                arr.add(newText.toString());
+                newText.setLength(0);;
+            } else if (text.charAt(x) == '\'') {
+                isQuote = !isQuote; 
+            } else {
+                newText.append(text.charAt(x));
+            }
+        }
+
+        arr.add(newText.toString());
+
+        return arr;
     }
 
 
@@ -48,15 +73,17 @@ public class Main {
 
             String[] tokens = command.split(" ");
 
+            ArrayList<String> token = textParser(command);
+
             if(command.equals("exit")) break;     
 
             switch(tokens[0]) {
                 
                 case "echo" -> {  
                     
-                    for (int i = 1; i < tokens.length; i++) {
-                        System.out.print(tokens[i] );
-                        if (i < tokens.length - 1) {System.out.print(" ");} // Print space until last element
+                    for (int i = 0; i < token.size(); i++) {
+                        System.out.print(token.get(i) );
+                        if (i < token.size()- 1) {System.out.print(" ");} // Print space until last element
                     }
                     System.out.println();
                 }
@@ -121,7 +148,7 @@ public class Main {
                     String path = findPath(tokens[0]);
 
                     if (path == null) {
-                        System.out.println(tokens[0] + ": not found");
+                        System.out.println(path + ": not found");
                         break;
                     }
 

@@ -1,8 +1,5 @@
- 1 ok
+ 1 echo hello
  2 history
- 3 history 1
- 4 history 3
- 5 echo pwd
- 6 pwd
- 7 history
- 8 exit
+ 3 history
+ 4 echo "\'this'\""
+ 5 exit

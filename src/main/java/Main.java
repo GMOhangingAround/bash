@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -77,10 +78,43 @@ public class Main {
     }
 
 
+    public static List<String> textFileReader(String textName, int value) throws Exception {
+
+        
+        List<String> fileReader = new ArrayList<>();
+        File text = new File(textName); // Create file object
+        Scanner read = new Scanner(text);
+        int count = 0;
+
+        while(read.hasNextLine()) {
+            fileReader.add(read.nextLine());
+            count++;
+        }
+                    
+        if (value == 0) {
+            read.close(); 
+            return fileReader;}
+    
+        int skip = 0;
+        if (count - value > 0) skip = count - value;
+        else skip = value; 
+        
+
+                   
+        read.close();
+
+        return fileReader.subList(skip, count);
+    }
+
+
+
+
+
+
     public static void main(String[] args) throws Exception {
     
 
-        Scanner scanner = new Scanner(System.in); // Start scanner
+       // Scanner scanner = new Scanner(System.in); // Start scanner
 
         String currentDirectory = System.getProperty("user.dir"); // Get current working directory 
 
@@ -92,21 +126,91 @@ public class Main {
         FileWriter history = new FileWriter("history.txt");
         int num = 1;
 
-        
+        /* Eneter raw mode to detect each caracter */ 
+        new ProcessBuilder("stty", "raw", "-echo").inheritIO().start().waitFor(); 
+
+        StringBuilder sb = new StringBuilder();
+        List<String> historyInputs = new ArrayList<>();
+        int pointer = historyInputs.size();
   
         while(true) {
 
-            System.out.print("$ ");
+            System.out.print("\r$ ");
+            
+            while(true) {
+                
+                int c = System.in.read();
+
+                if (c == 27) {
+                    int next1 = System.in.read();
+                    int next2 = System.in.read();
+
+                    if (next1 == 91 && next2 == 65) {
+                        // Arrow up
+
+                        if (pointer > 0) {
+                            pointer--;
+                            if (pointer == historyInputs.size()) {
+                                sb.setLength(0);
+                            } else {
+                                sb.setLength(0);
+                                sb.append(historyInputs.get(pointer));
+                            }
+                        }
+                    }
+
+                    if (next1 == 91 && next2 == 66) {
+                        // Arrow down
+                        if (pointer < historyInputs.size()) {
+                            pointer++;
+                            if (pointer == historyInputs.size()) {
+                                sb.setLength(0);
+                            } else {
+                                sb.setLength(0);
+                                sb.append(historyInputs.get(pointer)); 
+                            }
+                        }
+                    }
+                    System.out.print("\u001B[0G");
+                    System.out.print("\u001B[2K");
+                    System.out.print("$ " + sb.toString());
+                    System.out.flush();
+
+                } else if (c == 13) {
+                    //System.out.println();
+                    System.out.print("\r\n"); // Enter 
+                    break;
+                } else if (c == 127) {
+                    // Delete last character
+                    if (sb.length() > 0) {
+                        sb.deleteCharAt(sb.length() -1);
+                        System.out.print("\b \b");
+                        System.out.flush();
+                    }
+                } else {
+                    sb.append((char) c); // Cast int to char value
+                    System.out.print((char) c);
+                    System.out.flush();
+                }
         
-            String command = scanner.nextLine(); // Read next line 
+            }
+
+            //String command = scanner.nextLine(); // Read next line 
+
+            String command = sb.toString();
 
             history.write(" " + num + " ");
             history.write(command); // Write each command into the file
             history.write("\n");
             num++;
+            history.flush();
+
+            historyInputs.add(command);
+            sb.setLength(0);
+            pointer = historyInputs.size();
 
             //String[] tokens = command.split(" ");
-
+            
             ArrayList<String> token = textParser(command);
 
             if(command.equals("exit")) {
@@ -125,28 +229,19 @@ public class Main {
                 }
 
                 case "history" -> {
-
-                    history.flush();
-
-                    File text = new File("history.txt"); // Create file object
-
-                    Scanner read = new Scanner(text);
+                    
+                    int size = 0;
                     
                     if (token.size() > 1) {
-                        
-                        Integer val = Integer.parseInt(token.get(1));
-                        long lineCount = Files.lines(Paths.get("history.txt")).count();
-                        int skip = (int) lineCount - val; 
-
-                        for(int i = skip; i > 0; i--) read.nextLine();
+                        String s = token.get(1);
+                        size = Integer.parseInt(s);
                     }
                     
-                    
-                    while(read.hasNextLine()) {
-                        System.out.println(read.nextLine());
-                    }
+                    List<String> lines = textFileReader("history.txt", size);
 
-                    read.close();
+                    for (String line: lines) {
+                        System.out.print(line + "\r\n");
+                    }
                 }
 
                 case "type" -> {
@@ -216,16 +311,18 @@ public class Main {
                     ProcessBuilder pb = new ProcessBuilder(token);
                     pb.directory(new File(currentDirectory)); // Update directory
                     pb.inheritIO();
-                    pb.start().waitFor();               
+                    new ProcessBuilder("stty", "cooked", "echo").inheritIO().start().waitFor();
+                    pb.start().waitFor();    
+                    /* Eneter raw mode to detect each caracter */ 
+                    new ProcessBuilder("stty", "raw", "-echo").inheritIO().start().waitFor();        
                 
                 }
             };       
 
        } 
-
-
+        new ProcessBuilder("stty", "cooked", "echo").inheritIO().start().waitFor();
         history.close();
-        scanner.close();
+        //scanner.close();
 
     }
 }

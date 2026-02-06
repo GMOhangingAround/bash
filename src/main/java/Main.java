@@ -47,7 +47,8 @@ public class Main {
                 else if (c == '\\' && text.charAt(x + 1) < text.length())  {
                     char nextChar = text.charAt(x + 1);
                     if (nextChar == '\\' || nextChar == '"' || nextChar == '\n' || nextChar == '$') {
-                    newText.append(nextChar); x++;}
+                    newText.append(nextChar); x++;} 
+                    else newText.append(c);
                 } else {newText.append(c);}
             } else if (c == ' ' && !singleQuote && !doubleQuote) {
                 if (newText.length() > 0) {

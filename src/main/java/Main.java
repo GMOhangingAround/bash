@@ -232,31 +232,28 @@ public class Main {
                     
                     int size = 0;
                     
-                    try {
-                    if (token.size() > 1) {
-                        if (token.get(1).equals("-r")) {
-                            File read = new File(token.get(2));
-                            Scanner getText = new Scanner(read);
+                    if (token.size() > 1 && token.get(1).equals("-r")) {
+                        
+                        File read = new File(token.get(2));
+                        Scanner getText = new Scanner(read);
 
-                            while (getText.hasNextLine()) {
-                                historyInputs.add(getText.nextLine());
-                            }
+                        while (getText.hasNextLine()) {
+                            historyInputs.add(getText.nextLine());
+                        }
 
-                            getText.close();
-                        } else {
+                        getText.close();
+                    } else {
+                        if (token.size() > 1) {
                             String s = token.get(1);
                             size = Integer.parseInt(s);
-                        }                  
-                    }
-
-                    List<String> lines = textFileReader("history.txt", size);
-
-                    for (String line: lines) {
-                        System.out.print(line + "\r\n");
                         }
-                   } catch (Exception e) {
-                        System.out.print("\n");
-                   }
+
+                        List<String> lines = textFileReader("history.txt", size);
+
+                        for (String line: lines) {
+                            System.out.print(line + "\r\n");
+                        }
+                    }                  
                 }
 
                 case "type" -> {

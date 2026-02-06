@@ -37,15 +37,16 @@ public class Main {
 
         for (int x = 0; x < text.length(); x++) {
 
-            if (isBacklash) {
+            if (singleQuote) {
+                if (text.charAt(x) == '\'') singleQuote = !singleQuote;
+                else newText.append(text.charAt(x));
+            } else if (isBacklash) {
                 newText.append(text.charAt(x));
                 isBacklash = !isBacklash;
-
             } else if (text.charAt(x) == ' ' && !singleQuote && !doubleQuote) {
                 if (newText.length() > 0) {
                     arr.add(newText.toString());
-                    newText.setLength(0);;
-                }
+                    newText.setLength(0);}
             } else if (text.charAt(x) == '\"' && !singleQuote) {
                 doubleQuote = !doubleQuote;
             } else if (text.charAt(x) == '\'' && !doubleQuote) {

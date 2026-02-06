@@ -233,8 +233,6 @@ public class Main {
                     int size = 0;
                     
                     if (token.size() > 1) {
-                        String s = token.get(1);
-                        size = Integer.parseInt(s);
                         if (token.get(1).equals("-r")) {
                             File read = new File(token.get(2));
                             Scanner getText = new Scanner(read);
@@ -244,6 +242,9 @@ public class Main {
                             }
 
                             getText.close();
+                        } else {
+                            String s = token.get(1);
+                            size = Integer.parseInt(s);
                         }
                     }
                     

@@ -239,6 +239,10 @@ public class Main {
 
                         while (getText.hasNextLine()) {
                             historyInputs.add(getText.nextLine());
+                            history.write(" " + num + " ");
+                            history.write(getText.nextLine());
+                            num++;
+                            history.flush();
                         }
 
                         getText.close();

@@ -31,20 +31,20 @@ public class Main {
         StringBuilder newText = new StringBuilder();
         boolean singleQuote = false;
         boolean doubleQuote = false;
-        boolean isBacklash = false;   
 
        //for (char c : text.toCharArray()) {}
 
         for (int x = 0; x < text.length(); x++) {
             
             char c = text.charAt(x);
+            char nextC = text.charAt(x+1);
 
             if (singleQuote) {
                 if (c == '\'') singleQuote = !singleQuote;
                 else newText.append(c);
             } else if (doubleQuote) {
                 if (c == '\"') {doubleQuote = !doubleQuote;}
-                else if (c == '\\')  {newText.append(text.charAt(x+1)); x++;}
+                else if (c == '\\')  {newText.append(nextC); x++;}
                 else {newText.append(c);}
             } else if (c == ' ' && !singleQuote && !doubleQuote) {
                 if (newText.length() > 0) {
@@ -56,11 +56,9 @@ public class Main {
                 singleQuote = !singleQuote; 
             }  else if (c == '\\' ) {
                 if (x+1 < text.length()) {
-                    newText.append(text.charAt(x+1));
+                    newText.append(nextC);
                     x++;
                 }
-
-                //isBacklash = !isBacklash;
             } else {
                 newText.append(c);
             }

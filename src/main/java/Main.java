@@ -238,9 +238,9 @@ public class Main {
                         Scanner getText = new Scanner(read);
 
                         while (getText.hasNextLine()) {
-                            historyInputs.add(getText.nextLine());
-                            history.write(" " + num + " ");
-                            history.write(getText.nextLine());
+                            String nextLine = getText.nextLine();
+                            historyInputs.add(nextLine);
+                            history.write(" " + num + " " + nextLine + "\n");
                             num++;
                             history.flush();
                         }

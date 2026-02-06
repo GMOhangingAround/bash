@@ -1,2 +1,0 @@
- 1 echo th
- 2 exit

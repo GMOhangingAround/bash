@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -85,6 +86,10 @@ public class Main {
         Properties builtins = new Properties();
         builtins.load(new FileInputStream("builtins.conf"));
 
+        // Write into history file
+        FileWriter history = new FileWriter("history.txt", true);
+        int num = 1;
+
         
   
         while(true) {
@@ -92,6 +97,11 @@ public class Main {
             System.out.print("$ ");
         
             String command = scanner.nextLine(); // Read next line 
+
+            history.write(" " + num + " ");
+            history.write(command); // Write each command into the file
+            history.write("\n");
+            num++;
 
             //String[] tokens = command.split(" ");
 
@@ -108,6 +118,22 @@ public class Main {
                         if (i < token.size()- 1) {System.out.print(" ");} // Print space until last element
                     }
                     System.out.println();
+                }
+
+                case "history" -> {
+
+                    history.flush();
+
+                    File text = new File("history.txt"); // Create file object
+
+                    Scanner read = new Scanner(text);
+
+                    while (read.hasNextLine()) {
+                        System.out.println(read.nextLine());
+
+                    }
+
+                    read.close();
                 }
 
                 case "type" -> {
@@ -184,6 +210,8 @@ public class Main {
 
        } 
 
+
+        history.close();
         scanner.close();
 
     }

@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -129,10 +131,19 @@ public class Main {
                     File text = new File("history.txt"); // Create file object
 
                     Scanner read = new Scanner(text);
+                    
+                    if (token.size() > 1) {
+                        
+                        Integer val = Integer.parseInt(token.get(1));
+                        long lineCount = Files.lines(Paths.get("history.txt")).count();
+                        int skip = (int) lineCount - val; 
 
-                    while (read.hasNextLine()) {
+                        for(int i = skip; i > 0; i--) read.nextLine();
+                    }
+                    
+                    
+                    while(read.hasNextLine()) {
                         System.out.println(read.nextLine());
-
                     }
 
                     read.close();

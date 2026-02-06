@@ -44,7 +44,7 @@ public class Main {
                 else newText.append(c);
             } else if (doubleQuote) {
                 if (c == '"') {doubleQuote = !doubleQuote;}
-                else if (c == '\\' && text.charAt(x + 1) < text.length())  {
+                else if (c == '\\' && x+1 < text.length())  {
                     char nextChar = text.charAt(x + 1);
                     if (nextChar == '\\' || nextChar == '"' || nextChar == '\n' || nextChar == '$') {
                     newText.append(nextChar); x++;} 

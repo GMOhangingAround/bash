@@ -1,5 +1,6 @@
 import java.io.File;
-import java.util.HashMap;
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -28,23 +29,29 @@ public class Main {
 
         ArrayList<String> arr = new ArrayList<>();
         StringBuilder newText = new StringBuilder();
-        boolean isQuote = false;
-        boolean doubleQ = false;  
+        boolean singleQuote = false;
+        boolean doubleQuote = false;
+        boolean isBacklash = false;   
 
        //for (char c : text.toCharArray()) {}
 
         for (int x = 0; x < text.length(); x++) {
 
-            if (text.charAt(x) == ' ' && !isQuote) {
+            if (isBacklash) {
+                newText.append(text.charAt(x));
+                isBacklash = !isBacklash;
+
+            } else if (text.charAt(x) == ' ' && !singleQuote && !doubleQuote) {
                 if (newText.length() > 0) {
                     arr.add(newText.toString());
                     newText.setLength(0);;
                 }
-            } else if (text.charAt(x) == '\"' ) {
-                isQuote = !isQuote; 
-                doubleQ = !doubleQ;
-            } else if (text.charAt(x) == '\'' && !doubleQ) {
-                isQuote = !isQuote; 
+            } else if (text.charAt(x) == '\"' && !singleQuote) {
+                doubleQuote = !doubleQuote;
+            } else if (text.charAt(x) == '\'' && !doubleQuote) {
+                singleQuote = !singleQuote; 
+            }  else if (text.charAt(x) == '\\' ) {
+                isBacklash = !isBacklash;
             } else {
                 newText.append(text.charAt(x));
             }
@@ -63,16 +70,12 @@ public class Main {
 
         String currentDirectory = System.getProperty("user.dir"); // Get current working directory 
 
-        HashMap<String, String> arrguments = new HashMap<>();
-
-        arrguments.put("echo",  " is a shell builtin");
-        arrguments.put("exit", " is a shell builtin" );
-        arrguments.put("type", " is a shell builtin" ); 
-        arrguments.put("pwd", " is a shell builtin");
-        arrguments.put("cd", " is a shell builtin");
+        // Get builtins values and description
+        Properties builtins = new Properties();
+        builtins.load(new FileInputStream("builtins.conf"));
 
         
-        
+  
         while(true) {
 
             System.out.print("$ ");
@@ -100,8 +103,8 @@ public class Main {
 
                     if (token.size() == 1) {break;}
 
-                    if(arrguments.containsKey(token.get(1))) {
-                        System.out.println(token.get(1) + arrguments.get(token.get(1)));
+                    if(builtins.containsKey(token.get(1))) {
+                        System.out.println(token.get(1) + " " + builtins.getProperty(token.get(1)));
                     } else {
 
                         String fileName = token.get(1);
@@ -159,8 +162,7 @@ public class Main {
                         System.out.println(token.get(0) + ": command not found");
                         break;
                     }
-
-                    //token.get(0) = path;         
+      
                     ProcessBuilder pb = new ProcessBuilder(token);
                     pb.directory(new File(currentDirectory)); // Update directory
                     pb.inheritIO();

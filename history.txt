@@ -1,16 +1,2 @@
-echo  thishistoryexitechi thishistory??historyadd thishistorytype historyhistoryexitechi this
-echo histry
-type history
-history
-exit
  1 history
- 1 add
- 1 type pwd
- 1 cd ~
- 1 pwd
- 1 history
- 1 echo t
- 2 pwd
- 3 pwd ~
- 4 history
- 5 exit
+ 2 exit

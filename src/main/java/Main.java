@@ -87,7 +87,7 @@ public class Main {
         builtins.load(new FileInputStream("builtins.conf"));
 
         // Write into history file
-        FileWriter history = new FileWriter("history.txt", true);
+        FileWriter history = new FileWriter("history.txt");
         int num = 1;
 
         
@@ -107,7 +107,9 @@ public class Main {
 
             ArrayList<String> token = textParser(command);
 
-            if(command.equals("exit")) break;     
+            if(command.equals("exit")) {
+                break;
+            }     
 
             switch(token.get(0)) {
                 

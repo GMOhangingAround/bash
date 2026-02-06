@@ -1,2 +1,7 @@
- 1 ecj
- 2 exit
+ 1 history
+ 2 echo
+ 3 history
+ 4 history 2
+ 5 history -r "hits"
+ 6 history 2
+ 7 exit

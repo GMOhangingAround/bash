@@ -171,9 +171,9 @@ public class Main {
                             }
                         }
                     }
-                    System.out.print("\u001B[0G");
-                    System.out.print("\u001B[2K");
-                    System.out.print("$ " + sb.toString());
+                    System.out.print("\u001B[0G"); // Go to the lines front
+                    System.out.print("\u001B[2K"); // Clear entire line
+                    System.out.print("$ " + sb.toString()); // Print new buffer value
                     System.out.flush();
 
                 } else if (c == 13 || c == 10) {
@@ -235,6 +235,16 @@ public class Main {
                     if (token.size() > 1) {
                         String s = token.get(1);
                         size = Integer.parseInt(s);
+                        if (token.get(1).equals("-r")) {
+                            File read = new File(token.get(2));
+                            Scanner getText = new Scanner(read);
+
+                            while (getText.hasNextLine()) {
+                                historyInputs.add(getText.nextLine());
+                            }
+
+                            getText.close();
+                        }
                     }
                     
                     List<String> lines = textFileReader("history.txt", size);

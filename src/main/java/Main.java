@@ -36,22 +36,25 @@ public class Main {
        //for (char c : text.toCharArray()) {}
 
         for (int x = 0; x < text.length(); x++) {
+            
+            char c = text.charAt(x);
 
             if (singleQuote) {
-                if (text.charAt(x) == '\'') singleQuote = !singleQuote;
-                else newText.append(text.charAt(x));
+                if (c == '\'') singleQuote = !singleQuote;
+                else newText.append(c);
             } else if (doubleQuote) {
-                if (text.charAt(x) == '\"') doubleQuote = !doubleQuote;
-                else newText.append(text.charAt(x));
-            } else if (text.charAt(x) == ' ' && !singleQuote && !doubleQuote) {
+                if (c == '\"') {doubleQuote = !doubleQuote;}
+                else if (c == '\\')  {newText.append(text.charAt(x+1)); x++;}
+                else {newText.append(c);}
+            } else if (c == ' ' && !singleQuote && !doubleQuote) {
                 if (newText.length() > 0) {
                     arr.add(newText.toString());
                     newText.setLength(0);}
-            } else if (text.charAt(x) == '\"' && !singleQuote) {
+            } else if (c == '\"' && !singleQuote) {
                 doubleQuote = !doubleQuote;
-            } else if (text.charAt(x) == '\'' && !doubleQuote) {
+            } else if (c == '\'' && !doubleQuote) {
                 singleQuote = !singleQuote; 
-            }  else if (text.charAt(x) == '\\' ) {
+            }  else if (c == '\\' ) {
                 if (x+1 < text.length()) {
                     newText.append(text.charAt(x+1));
                     x++;
@@ -59,7 +62,7 @@ public class Main {
 
                 //isBacklash = !isBacklash;
             } else {
-                newText.append(text.charAt(x));
+                newText.append(c);
             }
         }
 

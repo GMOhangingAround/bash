@@ -176,7 +176,7 @@ public class Main {
                     System.out.print("$ " + sb.toString());
                     System.out.flush();
 
-                } else if (c == 13) {
+                } else if (c == 13 || c == 10) {
                     //System.out.println();
                     System.out.print("\r\n"); // Enter 
                     break;

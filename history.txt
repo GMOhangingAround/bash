@@ -1,5 +1,4 @@
- 1 echo hello
- 2 history
- 3 history
- 4 echo "\'this'\""
- 5 exit
+ 1 pwd
+ 2 cd ~
+ 3 pwd
+ 4 exit

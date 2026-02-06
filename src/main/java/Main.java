@@ -40,9 +40,9 @@ public class Main {
             if (singleQuote) {
                 if (text.charAt(x) == '\'') singleQuote = !singleQuote;
                 else newText.append(text.charAt(x));
-            } else if (isBacklash) {
-                newText.append(text.charAt(x));
-                isBacklash = !isBacklash;
+            } else if (doubleQuote) {
+                if (text.charAt(x) == '\"') doubleQuote = !doubleQuote;
+                else newText.append(text.charAt(x));
             } else if (text.charAt(x) == ' ' && !singleQuote && !doubleQuote) {
                 if (newText.length() > 0) {
                     arr.add(newText.toString());
@@ -52,7 +52,12 @@ public class Main {
             } else if (text.charAt(x) == '\'' && !doubleQuote) {
                 singleQuote = !singleQuote; 
             }  else if (text.charAt(x) == '\\' ) {
-                isBacklash = !isBacklash;
+                if (x+1 < text.length()) {
+                    newText.append(text.charAt(x+1));
+                    x++;
+                }
+
+                //isBacklash = !isBacklash;
             } else {
                 newText.append(text.charAt(x));
             }

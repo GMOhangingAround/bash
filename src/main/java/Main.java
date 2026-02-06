@@ -44,8 +44,11 @@ public class Main {
                 else newText.append(c);
             } else if (doubleQuote) {
                 if (c == '\"') {doubleQuote = !doubleQuote;}
-                else if (c == '\\')  {newText.append(text.charAt(x+1)); x++;}
-                else {newText.append(c);}
+                else if (c == '\\' && text.charAt(x + 1) < text.length())  {
+                    char nextChar = text.charAt(x + 1);
+                    if (nextChar == '\\' || nextChar == '\"' || nextChar == '\n' || nextChar == '$') {
+                    newText.append(nextChar); x++;}
+                } else {newText.append(c);}
             } else if (c == ' ' && !singleQuote && !doubleQuote) {
                 if (newText.length() > 0) {
                     arr.add(newText.toString());

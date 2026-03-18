@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
@@ -286,33 +287,38 @@ public class Main {
                 case "history" -> {
                     
                     int size = 0;
-                    
-                    if (token.size() > 1 && token.get(1).equals("-r")) {
+                    try {
+                        if (token.size() > 2 && token.get(1).equals("-r")) {
                         
-                        File read = new File(token.get(2));
-                        Scanner getText = new Scanner(read);
+                            File read = new File(token.get(2));
+                            Scanner getText = new Scanner(read);
 
-                        while (getText.hasNextLine()) {
-                            String nextLine = getText.nextLine();
-                            historyInputs.add(nextLine);
-                            history.write(" " + num + " " + nextLine + "\n");
-                            num++;
-                            history.flush();
-                        }
+                            while (getText.hasNextLine()) {
+                                String nextLine = getText.nextLine();
+                                historyInputs.add(nextLine);
+                                history.write(" " + num + " " + nextLine + "\n");
+                                num++;
+                                history.flush();
+                            }
 
-                        getText.close();
-                    } else {
-                        if (token.size() > 1) {
-                            String s = token.get(1);
-                            size = Integer.parseInt(s);
-                        }
+                            getText.close();
+                        } else {
+                            // Get n inputs from history
+                            if (token.size() > 1 && !token.get(1).equals("-r")) {
+                                String s = token.get(1);
+                                size = Integer.parseInt(s);
+                            }
 
-                        List<String> lines = textFileReader("history.txt", size);
+                            List<String> lines = textFileReader("history.txt", size);
 
-                        for (String line: lines) {
-                            System.out.print(line + "\r\n");
-                        }
-                    }                  
+                            for (String line: lines) {
+                                System.out.print(line + "\r\n");
+                            }
+                        }                 
+                    } catch(FileNotFoundException read) {
+                        System.out.print("\rFile: " + token.get(2) + " not found\r\n");
+                        System.out.flush();
+                    } 
                 }
 
                 case "type" -> {

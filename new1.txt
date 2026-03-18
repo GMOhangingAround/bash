@@ -1,0 +1,12 @@
+
+hiso
+
+pwd
+
+ok
+
+history -w "new1.txt"
+
+history
+
+history -w "new1.txt"

@@ -302,6 +302,17 @@ public class Main {
                             }
 
                             getText.close();
+                        } else if (token.size() > 2 && token.get(1).equals("-w")) {
+
+                            FileWriter write = new FileWriter(token.get(2));
+                            int x = 0;
+                            while(x < historyInputs.size()) {
+                                write.append("\n"+historyInputs.get(x) +"\n");
+                                x++;
+                            }
+
+                            write.close();
+
                         } else {
                             // Get n inputs from history
                             if (token.size() > 1 && !token.get(1).equals("-r")) {

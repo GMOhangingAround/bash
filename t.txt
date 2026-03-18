@@ -1,6 +1,8 @@
-echo write 1
-echo write 2
+echo this
 history -w "t.txt"
-echo append 1
-echo append 2
+echo add
+echo apple
+history -a "t.txt"
+history -a "t.txt"
+echo hi
 history -a "t.txt"

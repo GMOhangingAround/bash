@@ -311,9 +311,9 @@ public class Main {
                             if (token.get(1).equals("-a")) {
                                 FileWriter appendText = new FileWriter(token.get(2), true);
                                 for (x = lastWriten; x < historyInputs.size(); x++) {
-                                    appendText.append(historyInputs.get(x) + "\n");
-                                    lastWriten = x;
+                                    appendText.append(historyInputs.get(x) + "\n");      
                                 }
+                                lastWriten = x;
                                 appendText.close();
                             } else {
                                 FileWriter write = new FileWriter(token.get(2));

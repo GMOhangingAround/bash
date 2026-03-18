@@ -1,9 +1,6 @@
-pwd
-wd
-wd
-w
-ok
+echo write 1
+echo write 2
 history -w "t.txt"
-add
-echo we ad \\m
+echo append 1
+echo append 2
 history -a "t.txt"

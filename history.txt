@@ -1,4 +1,7 @@
- 1 history
- 2 history
- 3 history
- 4 exit
+ 1 echo write 1
+ 2 echo write 2
+ 3 history -w "t.txt"
+ 4 echo append 1
+ 5 echo append 2
+ 6 history -a "t.txt"
+ 7 exit

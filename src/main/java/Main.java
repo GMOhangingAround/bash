@@ -307,23 +307,23 @@ public class Main {
                             getText.close();
                         } else if (token.size() > 2 && (token.get(1).equals("-w") || token.get(1).equals("-a"))) {
 
-                            FileWriter write = new FileWriter(token.get(2));
-                            FileWriter appendText = new FileWriter(token.get(2), true);
                             int x = 0;
                             if (token.get(1).equals("-a")) {
+                                FileWriter appendText = new FileWriter(token.get(2), true);
                                 for (x = lastWriten; x < historyInputs.size(); x++) {
                                     appendText.append(historyInputs.get(x) + "\n");
                                     lastWriten = x;
                                 }
+                                appendText.close();
                             } else {
+                                FileWriter write = new FileWriter(token.get(2));
                                 while(x < historyInputs.size()) {
                                     write.append(historyInputs.get(x) +"\n");
                                     x++;
+                                    lastWriten = x;
                                 }
+                                write.close();
                             }
-
-                            write.close();
-                            appendText.close();
 
                         } else {
                             // Get n inputs from history

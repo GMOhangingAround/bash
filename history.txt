@@ -1,7 +1,5 @@
- 1 hiso
+ 1 pe
  2 pwd
- 3 ok
- 4 history -w "new1.txt"
- 5 history
- 6 history -w "new1.txt"
- 7 exit
+ 3 history -w "text2.txt"
+ 4 history
+ 5 exit

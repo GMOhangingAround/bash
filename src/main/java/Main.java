@@ -307,7 +307,7 @@ public class Main {
                             FileWriter write = new FileWriter(token.get(2));
                             int x = 0;
                             while(x < historyInputs.size()) {
-                                write.append("\n"+historyInputs.get(x) +"\n");
+                                write.append(historyInputs.get(x) +"\n");
                                 x++;
                             }
 

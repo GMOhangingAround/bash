@@ -1,0 +1,6 @@
+ 1 pwd
+ 2 pwd
+ 3 pwd
+ 4 pwd
+ 5 history
+ 6 exit

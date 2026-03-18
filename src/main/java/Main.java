@@ -1,8 +1,7 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,10 +130,12 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
         List<String> historyInputs = new ArrayList<>();
-        int pointer = historyInputs.size();
   
         while(true) {
 
+            sb.setLength(0);
+            int pointer = historyInputs.size(); // Reset pointer to history size
+            int cursorPos = sb.length(); 
             System.out.print("\r$ ");
             
             while(true) {
@@ -142,6 +143,7 @@ public class Main {
                 int c = System.in.read();
 
                 if (c == 27) {
+
                     int next1 = System.in.read();
                     int next2 = System.in.read();
 
@@ -155,8 +157,15 @@ public class Main {
                             } else {
                                 sb.setLength(0);
                                 sb.append(historyInputs.get(pointer));
+                                cursorPos = sb.length();
                             }
                         }
+
+                        System.out.print("\u001B[0G"); // Go to the lines front
+                        System.out.print("\u001B[2K"); // Clear entire line
+                        System.out.print("$ " + sb.toString()); // Print new buffer value
+                        System.out.flush();
+
                     }
 
                     if (next1 == 91 && next2 == 66) {
@@ -168,28 +177,72 @@ public class Main {
                             } else {
                                 sb.setLength(0);
                                 sb.append(historyInputs.get(pointer)); 
+                                cursorPos = sb.length();
                             }
                         }
+
+                        System.out.print("\u001B[0G"); // Go to the lines front
+                        System.out.print("\u001B[2K"); // Clear entire line
+                        System.out.print("$ " + sb.toString()); // Print new buffer value
+                        System.out.flush();
+
                     }
-                    System.out.print("\u001B[0G"); // Go to the lines front
-                    System.out.print("\u001B[2K"); // Clear entire line
-                    System.out.print("$ " + sb.toString()); // Print new buffer value
-                    System.out.flush();
+
+                    if (next1 == 91 && next2 == 67) {
+                        // Right arrow
+                        if (cursorPos < sb.length()) {
+                            cursorPos++;
+                            System.out.print("\u001B[C");
+                            System.out.flush();
+                        }                        
+                    }
+
+                    if (next1 == 91 && next2 == 68) {
+                        // Left arrow
+                        if (cursorPos > 0) {
+                            cursorPos--;
+                            System.out.print("\u001B[D");
+                            System.out.flush();   
+                        }
+                    }
 
                 } else if (c == 13 || c == 10) {
                     //System.out.println();
+                    if(sb.length() == 0) {sb.append("empty"); break;} // Enter new line if input is empty
                     System.out.print("\r\n"); // Enter 
                     break;
                 } else if (c == 127) {
-                    // Delete last character
-                    if (sb.length() > 0) {
-                        sb.deleteCharAt(sb.length() -1);
-                        System.out.print("\b \b");
+                    // Delete a character
+                    if (cursorPos > 0) {
+                        sb.deleteCharAt(cursorPos -1);
+                        cursorPos--;
+                        System.out.print("\b");
+                        System.out.print(sb.substring(cursorPos));
+                        System.out.print(" ");
+                        int charMoveBack = sb.length() - cursorPos + 1;
+
+                        System.out.print("\u001B[" + charMoveBack + "D");
+                       //System.out.print("\b \b");
                         System.out.flush();
                     }
                 } else {
-                    sb.append((char) c); // Cast int to char value
-                    System.out.print((char) c);
+                    //sb.append((char) c); // Cast int to char value
+                    if(cursorPos < sb.length()) {
+                        sb.insert(cursorPos, (char) c); 
+                    } else {
+                        sb.append((char) c); 
+                    }
+                    
+                    
+                    System.out.print(sb.substring(cursorPos));
+                    cursorPos++;
+
+                    // Move cursor back after inserted character 
+                    int charMoveBack = sb.length() - cursorPos;
+                    if (charMoveBack > 0) {
+                        System.out.print("\u001B[" + charMoveBack + "D");
+                    }
+                    //System.out.print((char) c);
                     System.out.flush();
                 }
         
@@ -199,13 +252,14 @@ public class Main {
 
             String command = sb.toString();
 
+            if (!command.equals("empty")) {
             history.write(" " + num + " ");
             history.write(command); // Write each command into the file
             history.write("\n");
             num++;
             history.flush();
-
             historyInputs.add(command);
+            }
             sb.setLength(0);
             pointer = historyInputs.size();
 
@@ -215,7 +269,8 @@ public class Main {
 
             if(command.equals("exit")) {
                 break;
-            }     
+            }    
+            
 
             switch(token.get(0)) {
                 
@@ -314,9 +369,12 @@ public class Main {
                         System.out.println("cd: " + token.get(1) + ": No such file or directory");
                     }
                 }
+                case "empty" -> {
+                    System.out.print("\r\n");
+                }
 
                 default -> {
-               
+                    try {
                     String path = findPath(token.get(0));
 
                     if (path == null) {
@@ -332,6 +390,13 @@ public class Main {
                     /* Eneter raw mode to detect each caracter */ 
                     new ProcessBuilder("stty", "raw", "-echo").inheritIO().start().waitFor();        
                 
+                } catch(IOException e) {
+                    System.out.print("Command not found");
+                    System.out.print("\r\n");
+                    /* Eneter raw mode to detect each caracter */ 
+                    new ProcessBuilder("stty", "raw", "-echo").inheritIO().start().waitFor();  
+                }
+
                 }
             };       
 

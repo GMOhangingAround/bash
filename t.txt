@@ -1,0 +1,9 @@
+pwd
+wd
+wd
+w
+ok
+history -w "t.txt"
+add
+echo we ad \\m
+history -a "t.txt"

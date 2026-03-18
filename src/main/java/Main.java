@@ -91,13 +91,13 @@ public class Main {
             count++;
         }
                     
-        if (value == 0) {
+        if (value == 0 || count - value < 0) {
             read.close(); 
             return fileReader;}
     
         int skip = 0;
         if (count - value > 0) skip = count - value;
-        else skip = value; 
+        else skip = count; 
         
 
                    
@@ -131,6 +131,9 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
         List<String> historyInputs = new ArrayList<>();
+
+        // Track number of elements writen to the file from history
+        int lastWriten = 0;
   
         while(true) {
 
@@ -251,7 +254,7 @@ public class Main {
 
             //String command = scanner.nextLine(); // Read next line 
 
-            String command = sb.toString();
+            String command = sb.toString().trim();
 
             if (!command.equals("empty")) {
             history.write(" " + num + " ");
@@ -302,20 +305,29 @@ public class Main {
                             }
 
                             getText.close();
-                        } else if (token.size() > 2 && token.get(1).equals("-w")) {
+                        } else if (token.size() > 2 && (token.get(1).equals("-w") || token.get(1).equals("-a"))) {
 
                             FileWriter write = new FileWriter(token.get(2));
+                            FileWriter appendText = new FileWriter(token.get(2), true);
                             int x = 0;
-                            while(x < historyInputs.size()) {
-                                write.append(historyInputs.get(x) +"\n");
-                                x++;
+                            if (token.get(1).equals("-a")) {
+                                for (x = lastWriten; x < historyInputs.size(); x++) {
+                                    appendText.append(historyInputs.get(x) + "\n");
+                                    lastWriten = x;
+                                }
+                            } else {
+                                while(x < historyInputs.size()) {
+                                    write.append(historyInputs.get(x) +"\n");
+                                    x++;
+                                }
                             }
 
                             write.close();
+                            appendText.close();
 
                         } else {
                             // Get n inputs from history
-                            if (token.size() > 1 && !token.get(1).equals("-r")) {
+                            if (token.size() > 1 && (!token.get(1).equals("-r") || !token.get(1).equals("-a"))) {
                                 String s = token.get(1);
                                 size = Integer.parseInt(s);
                             }

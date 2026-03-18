@@ -1,5 +1,4 @@
- 1 pe
- 2 pwd
- 3 history -w "text2.txt"
- 4 history
- 5 exit
+ 1 history
+ 2 history
+ 3 history
+ 4 exit

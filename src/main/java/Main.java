@@ -294,7 +294,8 @@ public class Main {
                     FileWriter write = new FileWriter(histFile);
 
                     for (String entry: historyInputs) {
-                        write.write(entry);
+                        write.write(" " + num + " " + entry + "\n");
+                        num++;
                     }
 
                     write.close();

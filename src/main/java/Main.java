@@ -108,9 +108,6 @@ public class Main {
 
 
 
-
-
-
     public static void main(String[] args) throws Exception {
     
 
@@ -135,10 +132,11 @@ public class Main {
         // Track number of elements writen to the file from history
         int lastWriten = 0;
 
-        String histFile = System.getenv("HISTFILE");
+        String histVar = System.getenv("HISTFILE");
         
-        if (histFile != null) {
-            Scanner sc = new Scanner(new File (histFile));
+        if (histVar != null) {
+            File histFile = new File(histVar);
+            Scanner sc = new Scanner(histFile);
 
             while(sc.hasNextLine()) {
                 String nextLine = sc.nextLine();
@@ -288,6 +286,21 @@ public class Main {
             ArrayList<String> token = textParser(command);
 
             if(command.equals("exit")) {
+
+                File histFile = new File(System.getenv("HISTFILE"));
+
+                if (histFile != null) {
+
+                    FileWriter write = new FileWriter(histFile);
+
+                    for (String entry: historyInputs) {
+                        write.write(entry);
+                    }
+
+                    write.close();
+
+                }
+
                 break;
             }    
             

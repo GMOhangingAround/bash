@@ -134,7 +134,23 @@ public class Main {
 
         // Track number of elements writen to the file from history
         int lastWriten = 0;
-  
+
+        String histFile = System.getenv("HISTFILE");
+        
+        if (histFile != null) {
+            Scanner sc = new Scanner(new File (histFile));
+
+            while(sc.hasNextLine()) {
+                String nextLine = sc.nextLine();
+                history.write(num + " " + nextLine + "\n");
+                historyInputs.add(nextLine);
+                num++;
+                lastWriten = num; 
+
+            }
+            sc.close();
+        }
+
         while(true) {
 
             sb.setLength(0);

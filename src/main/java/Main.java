@@ -287,10 +287,9 @@ public class Main {
 
             if(command.equals("exit")) {
 
-                File histFile = new File(System.getenv("HISTFILE"));
-
-                if (histFile != null) {
-
+                if (histVar != null) {
+                    
+                    File histFile = new File(histVar);
                     FileWriter write = new FileWriter(histFile);
 
                     for (String entry: historyInputs) {

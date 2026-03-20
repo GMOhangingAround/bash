@@ -295,7 +295,6 @@ public class Main {
 
                     for (String entry: historyInputs) {
                         write.write( entry + "\n");
-                        num++;
                     }
 
                     write.close();

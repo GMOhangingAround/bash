@@ -56,4 +56,12 @@
         </plugins>
     </build>
 
+
+  <dependencies>
+    <dependency>
+      <groupId>com.daiyc.lark</groupId>
+      <artifactId>lark-core</artifactId>
+      <version>0.1.3-RELEASE</version>
+    </dependency>
+  </dependencies>
 </project>

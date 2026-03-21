@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.daiyc.lark.core.infrastructure.PipedInputStream;
+
 public class Main {
 
     static public String findPath(String fileName) {
@@ -269,6 +271,7 @@ public class Main {
             //String command = scanner.nextLine(); // Read next line 
 
             String command = sb.toString().trim();
+            String[] commands = command.split("\\|");
 
             if (!command.equals("empty")) {
             history.write(" " + num + " ");
@@ -438,12 +441,33 @@ public class Main {
                         System.out.println(token.get(0) + ": command not found");
                         break;
                     }
-      
+
+                    ArrayList<ProcessBuilder> pipelines = new ArrayList<>();
+
+                    // for each command create a child process 
+                    for(String cmd : commands) {
+                        ProcessBuilder pb = new ProcessBuilder(textParser(cmd.trim()));
+                        pb.directory(new File(currentDirectory));
+                        pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+                        pipelines.add(pb);
+                    }
+
+                    pipelines.get(pipelines.size()-1).redirectOutput(ProcessBuilder.Redirect.INHERIT);
+
+                    new ProcessBuilder("stty", "cooked", "echo").inheritIO().start().waitFor();
+
+                    // Connect all child processes 
+                    List<Process> processes = ProcessBuilder.startPipeline(pipelines); 
+                    processes.get(processes.size()-1).waitFor();
+                    
+
+                    /* 
                     ProcessBuilder pb = new ProcessBuilder(token);
                     pb.directory(new File(currentDirectory)); // Update directory
                     pb.inheritIO();
                     new ProcessBuilder("stty", "cooked", "echo").inheritIO().start().waitFor();
-                    pb.start().waitFor();    
+                    pb.start().waitFor();  
+                    */  
                     /* Eneter raw mode to detect each caracter */ 
                     new ProcessBuilder("stty", "raw", "-echo").inheritIO().start().waitFor();        
                 
